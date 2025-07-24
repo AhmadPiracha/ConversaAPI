@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String               @id @default(uuid())
+  email                 String               @unique
+  name                  String
+  freeMessagesUsed      Int                  @default(0) @map("free_messages_used")
+  freeMessagesResetDate DateTime             @default(now()) @map("free_messages_reset_date")
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             DateTime             @updatedAt @map("updated_at")
+  
+  chats                 Chat[]
+  subscriptionBundles   SubscriptionBundle[]
+
+  @@map("users")
+}
+
+model Chat {
+  id            String   @id @default(uuid())
+  question      String
+  answer        String
+  tokens        Int
+  userId        String   @map("user_id")
+  bundleId      String?  @map("bundle_id")
+  isFreeMessage Boolean  @default(false) @map("is_free_message")
+  createdAt     DateTime @default(now()) @map("created_at")
+  
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bundle        SubscriptionBundle? @relation(fields: [bundleId], references: [id])
+
+  @@map("chats")
+}
+
+model SubscriptionBundle {
+  id           String       @id @default(uuid())
+  userId       String       @map("user_id")
+  tier         Tier
+  maxMessages  Int          @map("max_messages")
+  usedMessages Int          @default(0) @map("used_messages")
+  price        Decimal      @db.Decimal(10, 2)
+  startDate    DateTime     @map("start_date")
+  endDate      DateTime     @map("end_date")
+  renewalDate  DateTime?    @map("renewal_date")
+  billingCycle BillingCycle @map("billing_cycle")
+  autoRenew    Boolean      @default(true) @map("auto_renew")
+  active       Boolean      @default(true)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chats        Chat[]
+
+  @@map("subscription_bundles")
+}
+
+enum Tier {
+  BASIC
+  PRO
+  ENTERPRISE
+}
+
+enum BillingCycle {
+  MONTHLY
+  YEARLY
+}
