@@ -1,25 +1,33 @@
 # 🤖 AI Chat & Subscription Backend System
 
-A production-ready TypeScript backend implementing **Clean Architecture** and **Domain-Driven Design** for an AI-powered chat system with comprehensive subscription management.
-
-## 🎯 **What This Project Does**
-
-This system combines **AI chat functionality** with **subscription-based billing** to create a complete SaaS backend. Users can chat with an AI (simulated OpenAI responses) while the system intelligently manages usage quotas, billing cycles, and subscription tiers.
-
-### **Core Functionality:**
-- 💬 **AI Chat with Smart Quota Management**
-- 💳 **Multi-tier Subscription System** 
-- 📊 **Usage Tracking & Analytics**
-- 🔄 **Automated Billing & Renewals**
-- 🎯 **Freemium Business Model Support**
+A production-ready **TypeScript** backend implementing **Clean Architecture** and **Domain-Driven Design (DDD)** principles to power an **AI chat system** with full-fledged **subscription management**.
 
 ---
 
-## 🏗️ **System Architecture**
+## 🎯 What This Project Does
 
-Built with **Clean Architecture** and **Domain-Driven Design** principles:
+This backend is ideal for SaaS applications that need:
 
-\`\`\`
+* AI-powered chat services
+* Usage tracking and intelligent quota handling
+* Automated subscriptions, billing, and renewals
+* Freemium-to-premium upgrade flows
+
+### ✅ Core Features:
+
+* 💬 **AI Chat with Smart Quota Management**
+* 💳 **Multi-tier Subscription System**
+* 📊 **Usage Tracking & Analytics**
+* 🔄 **Automated Billing & Renewals**
+* 🆓 **Freemium Tier Support**
+
+---
+
+## 🏗️ System Architecture
+
+Designed using **Clean Architecture** + **DDD** for scalability, separation of concerns, and testability.
+
+```
 src/
 ├── chat/                    # 💬 Chat Domain Module
 │   ├── domain/             # Business logic & entities
@@ -35,124 +43,167 @@ src/
 │   │   └── services/       # Subscription business logic
 │   ├── infrastructure/
 │   └── interfaces/
-├── common/                 # 🔧 Shared Components
-│   ├── errors/            # Domain error classes
-│   └── middleware/        # Validation & error handling
+├── common/                 # 🔧 Shared Utilities
+│   ├── errors/             # Custom error classes
+│   └── middleware/         # Validation & error handling
 └── core/                   # 🏛️ Core Infrastructure
-    ├── database/          # Prisma client
-    └── scheduler/         # Automated tasks
-\`\`\`
+    ├── database/           # Prisma client & schema
+    └── scheduler/          # Cron jobs & automation
+```
 
 ---
 
-## ✨ **Key Features**
+## ✨ Feature Breakdown
 
-### 🤖 **AI Chat System**
-- **3 Free Messages/Month**: Every user gets free quota that auto-resets
-- **Simulated OpenAI Responses**: Realistic API delays and token usage
-- **Smart Quota Deduction**: Automatically uses best available quota source
-- **Message History**: Complete conversation tracking
-- **Token Analytics**: Usage metrics for billing and optimization
+### 🤖 AI Chat System
 
-### 💰 **Subscription Management**
-
-#### **Subscription Tiers:**
-| Tier | Messages | Monthly | Yearly | Features |
-|------|----------|---------|--------|----------|
-| **Basic** | 10/month | $9.99 | $99.99 | Perfect for casual users |
-| **Pro** | 100/month | $29.99 | $299.99 | Great for regular users |
-| **Enterprise** | Unlimited | $99.99 | $999.99 | For power users & businesses |
-
-#### **Billing Features:**
-- ✅ **Flexible Billing Cycles**: Monthly or yearly options
-- ✅ **Auto-Renewal**: Configurable automatic renewals
-- ✅ **Payment Simulation**: 90% success rate for testing
-- ✅ **Graceful Failures**: Handles payment failures elegantly
-- ✅ **Subscription Management**: Easy cancellation and modifications
-
-### 🔄 **Automated Operations**
-- **Daily Renewal Processing**: Runs at 2 AM automatically
-- **Monthly Quota Resets**: Free messages reset on 1st of each month
-- **Usage Tracking**: Real-time quota monitoring
-- **Error Recovery**: Robust error handling and logging
+* **3 Free Messages/Month** (auto-resets monthly)
+* **Simulated OpenAI Responses** with latency and token cost
+* **Intelligent Quota Deduction** (free → subscription → deny)
+* **Token Usage Analytics** per message
+* **Conversation History** tracking per user
 
 ---
 
-## 🚀 **Quick Start Guide**
+### 💳 Subscription Tiers
 
-### **Prerequisites**
-- Node.js 18+ 
-- PostgreSQL database (or Neon cloud database)
-- Git
+| Tier           | Messages  | Monthly Price | Yearly Price | Features                |
+| -------------- | --------- | ------------- | ------------ | ----------------------- |
+| **Basic**      | 10        | \$9.99        | \$99.99      | For casual users        |
+| **Pro**        | 100       | \$29.99       | \$299.99     | For regular users       |
+| **Enterprise** | Unlimited | \$99.99       | \$999.99     | For teams & power users |
 
-### **1. Setup Database**
+#### 🧾 Billing System:
 
-**Option A: Neon (Recommended)**
-1. Create account at [Neon.tech](https://neon.tech)
-2. Create new project
-3. Copy connection string
+* ✅ **Monthly & Yearly Plans**
+* ✅ **Simulated Payment Gateway** (90% success rate)
+* ✅ **Graceful Payment Failures**
+* ✅ **Auto Renewals**
+* ✅ **Manual Cancellation & Modifications**
 
-**Option B: Local PostgreSQL**
-\`\`\`bash
-# Install PostgreSQL and create database
-createdb ai_chat_db
-\`\`\`
+---
 
-### **2. Project Setup**
-\`\`\`bash
-# Clone/download the project
+### 🔄 Automation (via Cron)
+
+* **Daily Billing Cron** → Processes renewals (runs at 2 AM)
+* **Monthly Free Quota Reset** → Every 1st of month
+* **Real-Time Usage Tracking**
+* **Resilient Failure Recovery**
+
+---
+
+## 🚀 Getting Started
+
+### 🧰 Prerequisites
+
+* **Node.js v18+**
+* **PostgreSQL or Neon DB**
+* **Git**
+
+---
+
+### ⚙️ Setup Guide
+
+#### 1️⃣ Clone & Install
+
+```bash
+git clone https://github.com/your-username/ai-chat-subscription-backend
 cd ai-chat-subscription-backend
-
-# Install dependencies
 npm install
+```
 
-# Create environment file
+#### 2️⃣ Configure Environment
+
+```bash
 cp .env.example .env
-\`\`\`
+```
 
-### **3. Configure Environment**
-\`\`\`env
-# Add to .env file
+Update your `.env`:
+
+```env
 DATABASE_URL="your_neon_or_postgres_connection_string"
 PORT=3000
 NODE_ENV=development
-\`\`\`
+```
 
-### **4. Database Setup**
-\`\`\`bash
-# Generate Prisma client
+#### 3️⃣ Initialize DB with Prisma
+
+```bash
 npx prisma generate
-
-# Run migrations
 npx prisma migrate dev --name init
-
-# Seed sample data
 npx ts-node prisma/seed.ts
-
-# Create sample user
 npx ts-node scripts/create-sample-user.ts
-\`\`\`
+```
 
-### **5. Start Development Server**
-\`\`\`bash
+#### 4️⃣ Start the Server
+
+```bash
 npm run dev
-\`\`\`
+```
 
-### **6. Test the System**
-Open `http://localhost:3000` in your browser to access the testing interface.
+Access: `http://localhost:3000`
 
 ---
 
-## 📡 **API Documentation**
+## 🧪 API Documentation
 
-### **Chat Endpoints**
+### 🔹 POST `/api/chat/ask`
 
-#### Send Chat Message
-```http
-POST /api/chat/ask
-Content-Type: application/json
+Send a question to the AI and receive a simulated response.
 
+#### Request:
+
+```json
 {
   "userId": "550e8400-e29b-41d4-a716-446655440001",
   "question": "What is artificial intelligence?"
 }
+```
+
+#### Response:
+
+```json
+{
+  "answer": "Artificial intelligence (AI) refers to the simulation of human intelligence in machines...",
+  "tokenUsage": 34,
+  "quotaStatus": "Subscription"
+}
+```
+
+---
+
+## 📁 Scripts & Tooling
+
+* `prisma/seed.ts`: Seeds subscription plans
+* `scripts/create-sample-user.ts`: Creates test user
+* `core/scheduler`: Cron tasks for billing & quota resets
+* `common/middleware`: Centralized error handling
+
+---
+
+## ✅ TODO / Future Improvements
+
+* 🔐 Authentication (JWT/OAuth)
+* 🧾 Stripe Integration
+* 📊 Admin Dashboard
+* 🧪 Unit & Integration Testing (Jest)
+* 🐳 Dockerize the system
+* 📈 Monitoring & Logs (e.g., Winston, Sentry)
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! To get started:
+
+```bash
+git checkout -b feature/your-feature
+```
+
+Open a PR when ready 🚀
+
+---
+
+## 📄 License
+
+MIT © \[Ahmad Piracha]
