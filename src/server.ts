@@ -12,6 +12,9 @@ import { PrismaChatRepository } from "./chat/infrastructure/repositories/PrismaC
 import { PrismaSubscriptionRepository } from "./subscriptions/infrastructure/repositories/PrismaSubscriptionRepository"
 import { PrismaUserRepository } from "./subscriptions/infrastructure/repositories/PrismaUserRepository"
 import { Scheduler } from "./core/scheduler/scheduler"
+import { AuthController } from "./auth/interfaces/controllers/AuthController"
+import { createAuthRoutes } from "./auth/interfaces/routes/authRoutes"
+import { AuthService } from "./auth/domian/services/AuthService"
 
 dotenv.config()
 
@@ -22,23 +25,45 @@ const PORT = process.env.PORT || 3000
 app.use(cors())
 app.use(express.json())
 
-// Serve static files from public directory
+// Serve static files at /frontend path
+app.use("/frontend", express.static("public"))
+
+// Serve static files at root as well
 app.use(express.static("public"))
 
-// Dependency Injection
+// Controllers and Services
 const chatRepository = new PrismaChatRepository()
 const subscriptionRepository = new PrismaSubscriptionRepository()
 const userRepository = new PrismaUserRepository()
 
 const chatService = new ChatService(chatRepository, subscriptionRepository, userRepository)
-const subscriptionService = new SubscriptionService(subscriptionRepository, userRepository)
-
 const chatController = new ChatController(chatService)
+
+const subscriptionService = new SubscriptionService(subscriptionRepository, userRepository)
 const subscriptionController = new SubscriptionController(subscriptionService)
+
+// Auth setup
+const authService = new AuthService(userRepository)
+const authController = new AuthController(authService)
+
+// Main routes
+app.get("/", (req, res) => {
+  res.json({
+    message: "Welcome to ChatFlow API",
+    version: "1.0.0",
+    endpoints: {
+      frontend: "/frontend or /",
+      health: "/health",
+      chat: "/api/chat",
+      subscriptions: "/api/subscriptions",
+    },
+  })
+})
 
 // Routes
 app.use("/api/chat", createChatRoutes(chatController))
 app.use("/api/subscriptions", createSubscriptionRoutes(subscriptionController))
+app.use("/api/auth", createAuthRoutes(authController))
 
 // Health check
 app.get("/health", (req, res) => {

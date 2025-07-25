@@ -9,7 +9,7 @@ const config: Config = {
     "^.+\\.ts$": "ts-jest",
   },
   collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts", "!src/server.ts"],
-  moduleNameMapping: {
+  moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/src/__tests__/setup.ts"],

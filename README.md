@@ -1,151 +1,204 @@
-# 🤖 AI Chat & Subscription Backend System
+# ChatFlow - AI Chat & Subscription Management System
 
-A production-ready **TypeScript** backend implementing **Clean Architecture** and **Domain-Driven Design (DDD)** principles to power an **AI chat system** with full-fledged **subscription management**.
-
----
-
-## 🎯 What This Project Does
-
-This backend is ideal for SaaS applications that need:
-
-* AI-powered chat services
-* Usage tracking and intelligent quota handling
-* Automated subscriptions, billing, and renewals
-* Freemium-to-premium upgrade flows
-
-### ✅ Core Features:
-
-* 💬 **AI Chat with Smart Quota Management**
-* 💳 **Multi-tier Subscription System**
-* 📊 **Usage Tracking & Analytics**
-* 🔄 **Automated Billing & Renewals**
-* 🆓 **Freemium Tier Support**
+> A **TypeScript backend** implementing **Clean Architecture** and **Domain-Driven Design (DDD)** principles to power an AI chat system with **subscription management**, **usage tracking**, and **mock AI responses**.
 
 ---
 
-## 🏗️ System Architecture
+## 📋 Table of Contents
 
-Designed using **Clean Architecture** + **DDD** for scalability, separation of concerns, and testability.
+* [✨ Features](#-features)
+* [🏛️ Architecture](#-architecture)
+* [🛠 Tech Stack](#-tech-stack)
+* [🚀 Getting Started](#-getting-started)
+* [💾 Database Management](#-database-management)
+* [📡 API Documentation](#-api-documentation)
+* [🧪 Testing](#-testing)
+* [⚙️ Deployment](#-deployment)
+* [🧰 Troubleshooting](#-troubleshooting)
+* [🤝 Contributing](#-contributing)
+* [📄 License](#-license)
+
+---
+
+## ✨ Features
+
+### 🧠 AI Chat
+
+* Mock OpenAI-style responses with typing delay and token cost simulation
+* Smart quota management:
+  * 3 free messages per user/month (auto-resets monthly)
+  * Tier-based message quota (Basic, Pro, Enterprise)
+  * Dynamic fallback to free quota or active subscription
+* Intelligent quota deduction (free → subscription → deny)
+* Token usage analytics per message
+* Conversation history tracking per user
+* Graceful error handling with detailed responses
+
+### 💳 Subscription Management
+
+* Multi-tier subscription system (Basic, Pro, Enterprise)
+* Monthly/yearly billing cycles
+* Automated billing & renewals (via cron jobs)
+* Simulated payment gateway (90% success rate)
+* Graceful payment failures and recovery
+* Manual cancellation & modifications
+* Usage tracking & analytics
+
+### 🔐 Authentication
+
+* Secure JWT-based login system
+* Bcrypt password hashing
+* Route protection middleware
+* Demo user provisioning
+
+---
+
+## 🏛️ Architecture
+
+Designed using **Clean Architecture + DDD** principles for scalability, separation of concerns, and testability.
 
 ```
 src/
-├── chat/                    # 💬 Chat Domain Module
+├── auth/             # Auth logic (domain, infra, routes)
+├── chat/             # 💬 Chat Domain Module
 │   ├── domain/             # Business logic & entities
-│   │   ├── entities/       # Chat entity
-│   │   ├── repositories/   # Chat repository interface
-│   │   └── services/       # Chat business logic
 │   ├── infrastructure/     # Data access implementations
 │   └── interfaces/         # Controllers & routes
-├── subscriptions/          # 💳 Subscription Domain Module
+├── subscriptions/    # 💳 Subscription & billing
 │   ├── domain/
-│   │   ├── entities/       # User & SubscriptionBundle entities
-│   │   ├── repositories/   # Repository interfaces
-│   │   └── services/       # Subscription business logic
 │   ├── infrastructure/
 │   └── interfaces/
-├── common/                 # 🔧 Shared Utilities
-│   ├── errors/             # Custom error classes
-│   └── middleware/         # Validation & error handling
-└── core/                   # 🏛️ Core Infrastructure
-    ├── database/           # Prisma client & schema
-    └── scheduler/          # Cron jobs & automation
+├── common/           # Shared middleware, error handlers
+│   ├── errors/
+│   └── middleware/
+└── core/             # DB, scheduler, server config
+    ├── database/
+    └── scheduler/
 ```
 
----
-
-## ✨ Feature Breakdown
-
-### 🤖 AI Chat System
-
-* **3 Free Messages/Month** (auto-resets monthly)
-* **Simulated OpenAI Responses** with latency and token cost
-* **Intelligent Quota Deduction** (free → subscription → deny)
-* **Token Usage Analytics** per message
-* **Conversation History** tracking per user
+* **Domain**: Pure business logic and entities
+* **Infrastructure**: DB adapters, services
+* **Interfaces**: Controllers & route handlers
 
 ---
 
-### 💳 Subscription Tiers
+## 🛠 Tech Stack
 
-| Tier           | Messages  | Monthly Price | Yearly Price | Features                |
-| -------------- | --------- | ------------- | ------------ | ----------------------- |
-| **Basic**      | 10        | \$9.99        | \$99.99      | For casual users        |
-| **Pro**        | 100       | \$29.99       | \$299.99     | For regular users       |
-| **Enterprise** | Unlimited | \$99.99       | \$999.99     | For teams & power users |
-
-#### 🧾 Billing System:
-
-* ✅ **Monthly & Yearly Plans**
-* ✅ **Simulated Payment Gateway** (90% success rate)
-* ✅ **Graceful Payment Failures**
-* ✅ **Auto Renewals**
-* ✅ **Manual Cancellation & Modifications**
-
----
-
-### 🔄 Automation (via Cron)
-
-* **Daily Billing Cron** → Processes renewals (runs at 2 AM)
-* **Monthly Free Quota Reset** → Every 1st of month
-* **Real-Time Usage Tracking**
-* **Resilient Failure Recovery**
+| Category   | Tech Stack        |
+| ---------- | ----------------- |
+| Language   | TypeScript        |
+| Framework  | Express.js        |
+| Database   | PostgreSQL (Neon) |
+| ORM        | Prisma            |
+| Validation | Zod               |
+| Scheduling | node-cron         |
+| Auth       | JWT, bcrypt       |
+| Dev Tools  | ESLint, Prettier  |
+| Testing    | Jest              |
 
 ---
 
 ## 🚀 Getting Started
 
-### 🧰 Prerequisites
+### 🔧 Prerequisites
 
-* **Node.js v18+**
-* **PostgreSQL or Neon DB**
-* **Git**
+* Node.js `16+`
+* PostgreSQL (local or Neon)
+* Git
 
----
-
-### ⚙️ Setup Guide
-
-#### 1️⃣ Clone & Install
+### 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/ai-chat-subscription-backend
-cd ai-chat-subscription-backend
+git clone https://github.com/yourusername/chatflow.git
+cd chatflow
 npm install
-```
-
-#### 2️⃣ Configure Environment
-
-```bash
 cp .env.example .env
 ```
 
-Update your `.env`:
+Generate a JWT secret:
 
-```env
-DATABASE_URL="your_neon_or_postgres_connection_string"
-PORT=3000
-NODE_ENV=development
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+# Paste into your `.env` under JWT_SECRET
 ```
 
-#### 3️⃣ Initialize DB with Prisma
+### 🛢️ Database Setup
 
 ```bash
 npx prisma generate
 npx prisma migrate dev --name init
-npx ts-node prisma/seed.ts
-npx ts-node scripts/create-sample-user.ts
+npm run db:seed
+npm run create-user
 ```
 
-#### 4️⃣ Start the Server
+### ▶️ Start the App
 
 ```bash
 npm run dev
 ```
 
-Access: `http://localhost:3000`
+Visit:
+
+* **Frontend**: `http://localhost:3000`
+* **API**: `http://localhost:3000/api`
+* **Health Check**: `http://localhost:3000/health`
+
+### ⚡ Quick Setup (Single Command)
+
+```bash
+npm run setup
+```
 
 ---
 
-## 🧪 API Documentation
+## 💾 Database Management
+
+### Using Neon (Recommended)
+
+1. Create an account at [neon.tech](https://neon.tech) and get your connection string.
+2. Paste the connection URL into `.env`:
+
+```env
+DATABASE_URL="postgresql://user:pass@neon-url/neondb?sslmode=require"
+```
+
+3. Test the connection:
+
+```bash
+npm run test-db
+```
+
+### 🔁 Migrations
+
+```bash
+# Create migration
+npx prisma migrate dev --name <migration_name>
+
+# Deploy production migrations
+npx prisma migrate deploy
+
+# Reset DB (⚠️ deletes data)
+npx prisma migrate reset --force
+```
+
+### 📊 Prisma Studio
+
+```bash
+npx prisma studio
+```
+
+### 🧑‍💻 PSQL Commands (Optional)
+
+```bash
+psql "<NEON_URL>"
+\dt             -- list tables
+\d users        -- describe table
+SELECT * FROM users LIMIT 5;
+```
+
+---
+
+## 📡 API Documentation
 
 ### 🔹 POST `/api/chat/ask`
 
@@ -170,6 +223,48 @@ Send a question to the AI and receive a simulated response.
 }
 ```
 
+### 🔐 Register
+
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+```
+
+> Full API Reference available at [https://chatflow-demo.vercel.app/api-docs](https://chatflow-demo.vercel.app/api-docs)
+
+---
+
+## 💳 Subscription Tiers
+
+| Tier           | Messages  | Monthly Price | Yearly Price | Features                |
+| -------------- | --------- | ------------- | ------------ | ----------------------- |
+| **Basic**      | 10        | \$9.99        | \$99.99      | For casual users        |
+| **Pro**        | 100       | \$29.99       | \$299.99     | For regular users       |
+| **Enterprise** | Unlimited | \$99.99       | \$999.99     | For teams & power users |
+
+#### 🧾 Billing System:
+
+* **Monthly & Yearly Plans**
+* **Simulated Payment Gateway** (90% success rate)
+* **Graceful Payment Failures**
+* **Auto Renewals**
+* **Manual Cancellation & Modifications**
+
+---
+
+## 🔄 Automation (via Cron)
+
+* **Daily Billing Cron** → Processes renewals (runs at 2 AM)
+* **Monthly Free Quota Reset** → Every 1st of month
+* **Real-Time Usage Tracking**
+* **Resilient Failure Recovery**
+
 ---
 
 ## 📁 Scripts & Tooling
@@ -181,7 +276,40 @@ Send a question to the AI and receive a simulated response.
 
 ---
 
-## ✅ TODO / Future Improvements
+## 🧪 Testing
+
+Run all tests:
+
+```bash
+npm run test
+```
+
+Use `Jest` for unit/integration tests with mocking support.
+
+---
+
+## ⚙️ Deployment
+
+* Deploy backend to **Render**, **Railway**, or **Vercel Functions**
+* Use **Neon PostgreSQL** for serverless DB
+* Environment variables required:
+  * `DATABASE_URL`
+  * `JWT_SECRET`
+  * `NODE_ENV=production`
+
+---
+
+## 🧰 Troubleshooting
+
+| Issue                     | Fix                                              |
+| ------------------------- | ------------------------------------------------ |
+| JWT errors                | Ensure `JWT_SECRET` is set in `.env`             |
+| Database connection fails | Double-check `DATABASE_URL`, SSL options in Neon |
+| Prisma client not found   | Run `npx prisma generate`                        |
+
+---
+
+##   TODO / Future Improvements
 
 * 🔐 Authentication (JWT/OAuth)
 * 🧾 Stripe Integration
@@ -206,4 +334,4 @@ Open a PR when ready 🚀
 
 ## 📄 License
 
-MIT © \[Ahmad Piracha]
+MIT © [Ahmad Piracha]

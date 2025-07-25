@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversa API - AI Chat & Subscription System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Authentication Section (Default View) -->
+    <div id="authSection" class="min-h-screen flex items-center justify-center p-6">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <div class="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <span class="text-white text-2xl font-bold">CA</span>
+                </div>
+                <h1 class="text-4xl font-bold text-blue-600 mb-2">Conversa API</h1>
+                <p class="text-gray-600">AI Chat & Subscription Management</p>
+                <p class="text-sm text-gray-500 mt-2">Sign in to get started</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Welcome Back</h2>
+                <form id="loginFormElement" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="loginEmail" required 
+                               placeholder="Enter your email"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="loginPassword" required 
+                               placeholder="Enter your password"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" id="loginBtn"
+                            class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        <span id="loginBtnText">Sign In</span>
+                        <span id="loginBtnSpinner" class="hidden">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Signing In...
+                        </span>
+                    </button>
+                </form>
+                
+                <!-- Demo User Quick Login -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-sm text-gray-600 mb-2">🚀 Quick Demo Access:</p>
+                    <button id="demoLogin" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        Login as Demo User
+                    </button>
+                </div>
+                
+                <p class="mt-6 text-center text-sm text-gray-600">
+                    Don't have an account? 
+                    <button id="showRegister" class="text-blue-600 hover:underline font-medium">Create Account</button>
+                </p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Create Account</h2>
+                <form id="registerFormElement" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="registerName" required 
+                               placeholder="Enter your full name"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="registerEmail" required 
+                               placeholder="Enter your email"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="registerPassword" required minlength="6"
+                               placeholder="Create a password (min 6 characters)"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" id="registerBtn"
+                            class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                        <span id="registerBtnText">Create Account</span>
+                        <span id="registerBtnSpinner" class="hidden">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Creating Account...
+                        </span>
+                    </button>
+                </form>
+                <p class="mt-6 text-center text-sm text-gray-600">
+                    Already have an account? 
+                    <button id="showLogin" class="text-blue-600 hover:underline font-medium">Sign In</button>
+                </p>
+            </div>
+
+            <!-- Result Messages -->
+            <div id="authResult" class="mt-4"></div>
+        </div>
+    </div>
+
+    <!-- Main Application (Hidden until authenticated) -->
+    <div id="mainApp" class="hidden bg-gray-100 min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center">
+                            <div class="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-white text-sm font-bold">CA</span>
+                            </div>
+                            <h1 class="text-xl font-bold text-blue-600">Conversa API</h1>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div id="userInfo" class="flex items-center space-x-3">
+                            <div class="text-right">
+                                <p id="userName" class="text-sm font-medium text-gray-700"></p>
+                                <p id="userEmail" class="text-xs text-gray-500"></p>
+                            </div>
+                            <button id="logoutBtn" class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors">
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <p class="text-xl text-gray-600">AI Chat & Subscription Management System</p>
+                    <p class="text-sm text-gray-500 mt-2">Powered by Clean Architecture & Domain-Driven Design</p>
+                </div>
+                
+                <!-- Health Check -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                        System Status
+                    </h2>
+                    <button id="healthCheck" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        Check Health
+                    </button>
+                    <div id="healthResult" class="mt-4"></div>
+                </div>
+
+                <!-- Chat Section -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">💬</span>
+                        AI Chat
+                    </h2>
+                    <div class="mb-4">
+                        <textarea id="question" placeholder="Ask your question..." 
+                                  class="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3"></textarea>
+                        <button id="sendMessage" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                            Send Message
+                        </button>
+                    </div>
+                    <div id="chatResult" class="mt-4"></div>
+                </div>
+
+                <!-- Subscription Section -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">💳</span>
+                        Create Subscription
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <select id="tier" class="p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="BASIC">Basic - 10 messages ($9.99/month)</option>
+                            <option value="PRO">Pro - 100 messages ($29.99/month)</option>
+                            <option value="ENTERPRISE">Enterprise - Unlimited ($99.99/month)</option>
+                        </select>
+                        <select id="billingCycle" class="p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="MONTHLY">Monthly</option>
+                            <option value="YEARLY">Yearly (Save 20%)</option>
+                        </select>
+                        <button id="createSubscription" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                            Create Subscription
+                        </button>
+                    </div>
+                    <div id="subscriptionResult" class="mt-4"></div>
+                </div>
+
+                <!-- User Subscriptions -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">📊</span>
+                        Your Subscriptions
+                    </h2>
+                    <button id="loadSubscriptions" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors mb-4">
+                        Load Subscriptions
+                    </button>
+                    <div id="subscriptionsResult" class="mt-4"></div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center mt-8 text-gray-500">
+                    <p>Conversa API Backend v1.0.0</p>
+                    <p class="text-sm">Built with TypeScript, Express.js, Prisma & Clean Architecture</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        let currentUser = null;
+        let authToken = null;
+
+        // Check authentication on page load
+        function checkAuth() {
+            authToken = localStorage.getItem('conversaapi_token');
+            const userStr = localStorage.getItem('conversaapi_user');
+            
+            if (authToken && userStr) {
+                currentUser = JSON.parse(userStr);
+                showMainApp();
+            } else {
+                showAuthSection();
+            }
+        }
+
+        function showMainApp() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            // Auto-load health check
+            setTimeout(() => {
+                document.getElementById('healthCheck').click();
+            }, 500);
+        }
+
+        function showAuthSection() {
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        // Form switching
+        document.getElementById('showRegister').addEventListener('click', () => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        });
+
+        document.getElementById('showLogin').addEventListener('click', () => {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        });
+
+        // Demo login
+        document.getElementById('demoLogin').addEventListener('click', () => {
+            document.getElementById('loginEmail').value = 'demo@example.com';
+            document.getElementById('loginPassword').value = 'demo123';
+            document.getElementById('loginFormElement').dispatchEvent(new Event('submit'));
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('conversaapi_token');
+            localStorage.removeItem('conversaapi_user');
+            currentUser = null;
+            authToken = null;
+            showAuthSection();
+            
+            // Clear any displayed data
+            document.getElementById('chatResult').innerHTML = '';
+            document.getElementById('subscriptionResult').innerHTML = '';
+            document.getElementById('subscriptionsResult').innerHTML = '';
+            document.getElementById('healthResult').innerHTML = '';
+        });
+
+        // Utility functions
+        function showLoading(btnId, spinnerId, textId) {
+            document.getElementById(btnId).disabled = true;
+            document.getElementById(spinnerId).classList.remove('hidden');
+            document.getElementById(textId).classList.add('hidden');
+        }
+
+        function hideLoading(btnId, spinnerId, textId) {
+            document.getElementById(btnId).disabled = false;
+            document.getElementById(spinnerId).classList.add('hidden');
+            document.getElementById(textId).classList.remove('hidden');
+        }
+
+        function showMessage(message, type = 'success') {
+            const bgColor = type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700';
+            const icon = type === 'success' ? ' ' : ' ';
+            
+            document.getElementById('authResult').innerHTML = `
+                <div class="p-4 ${bgColor} border rounded-lg">
+                    ${icon} ${message}
+                </div>
+            `;
+        }
+
+        // API call with auth
+        async function apiCall(url, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+
+            if (authToken) {
+                headers.Authorization = `Bearer ${authToken}`;
+            }
+
+            return fetch(url, {
+                ...options,
+                headers
+            });
+        }
+
+        // Login
+        document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            showLoading('loginBtn', 'loginBtnSpinner', 'loginBtnText');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Login failed: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('conversaapi_token', data.data.token);
+                    localStorage.setItem('conversaapi_user', JSON.stringify(data.data.user));
+                    
+                    currentUser = data.data.user;
+                    authToken = data.data.token;
+                    
+                    showMessage('Login successful! Welcome to Conversa API!', 'success');
+                    
+                    setTimeout(() => {
+                        showMainApp();
+                    }, 1500);
+                } else {
+                    throw new Error(data.error?.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage(error.message || 'Login failed. Please check your credentials.', 'error');
+            } finally {
+                hideLoading('loginBtn', 'loginBtnSpinner', 'loginBtnText');
+            }
+        });
+
+        // Register
+        document.getElementById('registerFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            showLoading('registerBtn', 'registerBtnSpinner', 'registerBtnText');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Registration failed: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('conversaapi_token', data.data.token);
+                    localStorage.setItem('conversaapi_user', JSON.stringify(data.data.user));
+                    
+                    currentUser = data.data.user;
+                    authToken = data.data.token;
+                    
+                    showMessage('Account created successfully! Welcome to Conversa API!', 'success');
+                    
+                    setTimeout(() => {
+                        showMainApp();
+                    }, 1500);
+                } else {
+                    throw new Error(data.error?.message || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage(error.message || 'Registration failed. Please try again.', 'error');
+            } finally {
+                hideLoading('registerBtn', 'registerBtnSpinner', 'registerBtnText');
+            }
+        });
+
+        // Health Check
+        document.getElementById('healthCheck').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                document.getElementById('healthResult').innerHTML = `
+                    <div class="p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                          Conversa API is healthy! Status: ${data.status}, Time: ${new Date(data.timestamp).toLocaleString()}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('healthResult').innerHTML = `
+                    <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                          Conversa API is not responding: ${error.message}
+                    </div>
+                `;
+            }
+        });
+
+        // Send Chat Message
+        document.getElementById('sendMessage').addEventListener('click', async () => {
+            const question = document.getElementById('question').value;
+
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+
+            try {
+                const response = await apiCall(`${API_BASE}/api/chat/ask`, {
+                    method: 'POST',
+                    body: JSON.stringify({ userId: currentUser.id, question }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('chatResult').innerHTML = `
+                        <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h3 class="font-semibold text-blue-800">Conversa API Response:</h3>
+                            <p class="mt-2 text-gray-700">${data.data.message.answer}</p>
+                            <div class="mt-3 text-sm text-gray-600 bg-gray-50 p-3 rounded">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p><strong>Tokens used:</strong> ${data.data.message.tokens}</p>
+                                        <p><strong>Free messages left:</strong> ${data.data.remainingQuota.freeMessages}</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Bundle messages:</strong> ${data.data.remainingQuota.bundleMessages === -1 ? 'Unlimited' : data.data.remainingQuota.bundleMessages}</p>
+                                        ${data.data.remainingQuota.bundleTier ? `<p><strong>Current tier:</strong> ${data.data.remainingQuota.bundleTier}</p>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('question').value = '';
+                } else {
+                    document.getElementById('chatResult').innerHTML = `
+                        <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                            Error: ${data.error.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('chatResult').innerHTML = `
+                    <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        Network error: ${error.message}
+                    </div>
+                `;
+            }
+        });
+
+        // Create Subscription
+        document.getElementById('createSubscription').addEventListener('click', async () => {
+            const tier = document.getElementById('tier').value;
+            const billingCycle = document.getElementById('billingCycle').value;
+
+            try {
+                const response = await apiCall(`${API_BASE}/api/subscriptions`, {
+                    method: 'POST',
+                    body: JSON.stringify({ userId: currentUser.id, tier, billingCycle, autoRenew: true }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('subscriptionResult').innerHTML = `
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <h3 class="font-semibold text-green-800">Subscription Created Successfully! 🎉</h3>
+                            <div class="mt-2 grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p><strong>Tier:</strong> ${data.data.tier}</p>
+                                    <p><strong>Messages:</strong> ${data.data.maxMessages === -1 ? 'Unlimited' : data.data.maxMessages}</p>
+                                </div>
+                                <div>
+                                    <p><strong>Price:</strong> $${data.data.price}</p>
+                                    <p><strong>Billing:</strong> ${data.data.billingCycle}</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">Expires: ${new Date(data.data.endDate).toLocaleDateString()}</p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('subscriptionResult').innerHTML = `
+                        <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                            Error: ${data.error.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('subscriptionResult').innerHTML = `
+                    <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        Network error: ${error.message}
+                    </div>
+                `;
+            }
+        });
+
+        // Load User Subscriptions
+        document.getElementById('loadSubscriptions').addEventListener('click', async () => {
+            try {
+                const response = await apiCall(`${API_BASE}/api/subscriptions?userId=${currentUser.id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.data.length === 0) {
+                        document.getElementById('subscriptionsResult').innerHTML = `
+                            <div class="p-4 bg-gray-100 border border-gray-300 text-gray-700 rounded-lg text-center">
+                                <p class="text-lg">📭 No active subscriptions found</p>
+                                <p class="text-sm mt-1">Create your first subscription above to get started!</p>
+                            </div>
+                        `;
+                    } else {
+                        const subscriptionsHtml = data.data.map(sub => `
+                            <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg mb-3">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-lg text-gray-800">${sub.tier} Plan</h4>
+                                        <div class="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-600">
+                                            <div>
+                                                <p><strong>Messages:</strong> ${sub.usedMessages}/${sub.maxMessages === -1 ? 'Unlimited' : sub.maxMessages}</p>
+                                                <p><strong>Price:</strong> $${sub.price}/${sub.billingCycle.toLowerCase()}</p>
+                                            </div>
+                                            <div>
+                                                <p><strong>Expires:</strong> ${new Date(sub.endDate).toLocaleDateString()}</p>
+                                                <p><strong>Auto-renew:</strong> ${sub.autoRenew ? '  Yes' : '  No'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-2 ml-4">
+                                        <button onclick="toggleAutoRenew('${sub.id}', ${!sub.autoRenew})" 
+                                                class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600 transition-colors">
+                                            ${sub.autoRenew ? 'Disable' : 'Enable'} Auto-renew
+                                        </button>
+                                        <button onclick="cancelSubscription('${sub.id}')" 
+                                                class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition-colors">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        document.getElementById('subscriptionsResult').innerHTML = subscriptionsHtml;
+                    }
+                } else {
+                    document.getElementById('subscriptionsResult').innerHTML = `
+                        <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                            Error: ${data.error.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('subscriptionsResult').innerHTML = `
+                    <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        Network error: ${error.message}
+                    </div>
+                `;
+            }
+        });
+
+        // Toggle Auto-renew
+        async function toggleAutoRenew(subscriptionId, autoRenew) {
+            try {
+                const response = await apiCall(`${API_BASE}/api/subscriptions/${subscriptionId}/auto-renew`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ autoRenew }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('loadSubscriptions').click();
+                } else {
+                    alert(`Error: ${data.error.message}`);
+                }
+            } catch (error) {
+                alert(`Network error: ${error.message}`);
+            }
+        }
+
+        // Cancel Subscription
+        async function cancelSubscription(subscriptionId) {
+            if (!confirm('Are you sure you want to cancel this subscription?')) {
+                return;
+            }
+
+            try {
+                const response = await apiCall(`${API_BASE}/api/subscriptions/${subscriptionId}`, {
+                    method: 'DELETE',
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('loadSubscriptions').click();
+                } else {
+                    alert(`Error: ${data.error.message}`);
+                }
+            } catch (error) {
+                alert(`Network error: ${error.message}`);
+            }
+        }
+
+        // Initialize on page load
+        checkAuth();
+    </script>
+</body>
+</html>

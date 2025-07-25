@@ -1,15 +1,19 @@
-// Test setup file
 import { prisma } from "@/core/database/prisma"
-import { beforeAll, afterAll, beforeEach } from "@jest/globals"
 
-beforeAll(async () => {
-  // Setup test database
-})
+describe("Test setup", () => {
+  afterAll(async () => {
+    // Ensure prisma disconnects after all tests
+    await prisma.$disconnect()
+  })
 
-afterAll(async () => {
-  await prisma.$disconnect()
-})
+  it("should have a prisma instance defined", () => {
+    expect(prisma).toBeDefined()
+  })
 
-beforeEach(async () => {
-  // Clean up before each test
+  it("should be able to connect and disconnect to the database", async () => {
+    // Try a simple query to check connection
+    const result = await prisma.$queryRaw`SELECT 1`
+    expect(result).toBeDefined()
+    // Disconnect handled in afterAll
+  })
 })
